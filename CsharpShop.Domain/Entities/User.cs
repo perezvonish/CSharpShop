@@ -1,4 +1,5 @@
-﻿using CsharpShop.Domain.Enums;
+﻿using CsharpShop.Domain.Dto;
+using CsharpShop.Domain.Enums;
 
 namespace CsharpShop.Domain.Entities
 {
@@ -18,6 +19,14 @@ namespace CsharpShop.Domain.Entities
             this.Password = password;
             this.Email = email;
             this.Age = age;
+        }
+
+        public User(UserCreation data)
+        {
+            this.Username = data.Username;
+            this.Password = data.Password;
+            this.Email = data.Email;
+            this.Age = data.Age;
         }
     }
 }

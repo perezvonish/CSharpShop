@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using CsharpShop.Domain.Entities;
 using CsharpShop.Infrastucture;
 using CsharpShop.Api.Services;
+using CsharpShop.Domain.Dto;
+using CsharpShop.Api.Dto;
 
 namespace CsharpShop.Api.Controllers
 {
@@ -16,27 +17,39 @@ namespace CsharpShop.Api.Controllers
             this._userService = userService;
         }
 
-        [HttpGet("id")]
-        public JsonResult GetUser(int id) {
-            return new JsonResult(user);
+        [HttpGet("{id: int}")]
+        public User GetUser(int id)
+        {
+            return this._userService.GetUserById(id);
         }
 
         [HttpGet("list")]
-        public JsonResult GetUserList(User user)
+        public User?[] GetUserList() //todo add pagination
         {
-            return new JsonResult(user);
+            return this._userService.GetUserList();
         }
 
         [HttpPost("create")]
-        public JsonResult CreateUser(User user) {  return new JsonResult(user); }
+        public User CreateUser(UserCreation body) {
+            User user = new User(body);
+
+            return this._userService.Create(user);
+        }
 
         [HttpDelete("delete")]
-        public JsonResult DeleteUser(User user) { return new JsonResult(user); }
+        public async Task<User> DeleteUser(int id)
+        {
+            return await this._userService.Delete(id);
+        }
 
         [HttpPatch("update")]
-        public JsonResult UpdateUser(User user) { return new JsonResult(user);}
+        public Task<User> UpdateUser(int id) { //todo add data
+            return this._userService.UpdateAsync(id);
+        }
 
         [HttpPost("ban")]
-        public JsonResult BanUser(User user) { return new JsonResult(user);}
+        public async Task<User> BanUser(UserBan body) {
+            return await this._userService.Ban(body);
+        }
     }
 }
